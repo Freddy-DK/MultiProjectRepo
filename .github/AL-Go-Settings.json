@@ -7,5 +7,6 @@
   "useCompilerFolder": true,
   "doNotPublishApps": true,
   "generateDependencyArtifacts": true,
-  "artifact": "//28.0/w1/weekly/"
+  "artifact": "//28.0/w1/weekly/",
+  "templateSha": "a3877dcad8a18d304995e52367f0e0b54d35f534"
 }
