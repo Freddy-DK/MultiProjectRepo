@@ -6,5 +6,6 @@
   "githubRunner": "ubuntu-latest",
   "useCompilerFolder": true,
   "doNotPublishApps": true,
+  "generateDependencyArtifacts": true,
   "artifact": "//28.0/w1/weekly/"
 }
