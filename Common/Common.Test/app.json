@@ -1,0 +1,45 @@
+{
+  "id": "8f85d54c-ab9e-471e-bcb9-e666f1e48db5",
+  "name": "Common.Test",
+  "publisher": "Freddy",
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [
+    {
+      "name": "Library Assert",
+      "publisher": "Microsoft",
+      "id": "dd0be2ea-f733-4d65-bb34-a28f4624fb14",
+      "version": "28.0.0.0"
+    },
+    {
+      "name": "Any",
+      "publisher": "Microsoft",
+      "id": "e7320ebb-08b3-4406-b1ec-b4927d3e280b",
+      "version": "28.0.0.0"
+    }
+  ],
+  "screenshots": [],
+  "platform": "28.0.0.0",
+  "application": "28.0.0.0",
+  "runtime": "17.0",
+  "idRanges": [
+    {
+      "from": 90000,
+      "to": 90010
+    }
+  ],
+  "features": [
+    "NoImplicitWith"
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": false,
+    "includeSourceInSymbolFile": false
+  }
+}

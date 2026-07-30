@@ -1,5 +1,10 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.1/.Modules/settings.schema.json",
   "type": "PTE",
-  "templateUrl": "https://github.com/microsoft/AL-Go-PTE@main"
+  "templateUrl": "https://github.com/microsoft/AL-Go-PTE@main",
+  "runs-on": "ubuntu-latest",
+  "githubRunner": "ubuntu-latest",
+  "useCompilerFolder": true,
+  "doNotPublishApps": true,
+  "artifact": "//28.0/w1/weekly/"
 }

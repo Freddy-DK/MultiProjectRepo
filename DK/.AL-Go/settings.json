@@ -1,0 +1,8 @@
+{
+  "$schema": "https://raw.githubusercontent.com/freddydk/AL-Go/customize/Actions/settings.schema.json",
+  "country": "dk",
+  "appFolders": [],
+  "testFolders": [],
+  "repoVersion": "1.0",
+  "artifact": "//28.0/dk/weekly/"
+}
