@@ -1,7 +1,25 @@
 {
     "folders": [
         {
-            "path": ".AL-Go"
+            "path": ".github"
+        },
+        {
+            "path": "Common"
+        },
+        {
+            "path": "Misc"
+        },
+        {
+            "path": "W1"
+        },
+        {
+            "path": "IT"
+        },
+        {
+            "path": "DK"
+        },
+        {
+            "path": "DE"
         }
     ],
     "settings": {}

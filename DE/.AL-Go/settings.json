@@ -1,0 +1,8 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.1/.Modules/settings.schema.json",
+  "country": "de",
+  "appFolders": [],
+  "testFolders": [],
+  "repoVersion": "1.0",
+  "artifact": "//28.0.46665.53102/de/closest/"
+}
