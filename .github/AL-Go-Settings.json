@@ -9,5 +9,21 @@
   "useProjectDependencies": true,
   "generateDependencyArtifacts": true,
   "artifact": "//28.0.46665.53102/w1/closest/",
-  "templateSha": "a3877dcad8a18d304995e52367f0e0b54d35f534"
+  "templateSha": "a3877dcad8a18d304995e52367f0e0b54d35f534",
+  "fkh": {
+    "CreateContainer.cpu": "250m",
+    "CreateContainer.memory": "3Gi",
+    "CreateContainer.spot": false,
+    "CreateContainer.moveAllAppsToDevScope": true,
+    "CreateContainer.updateLaunchJson": "repo",
+    "CreateContainer.startupObjectId": 130451,
+    "CreateContainer.autostop?": "18:00",
+    "CreateContainer.tenantDatabase": "",
+    "CreateContainer.useDatabase": "",
+    "CreateContainer.multitenant": false,
+    "CreateContainer.licenseFileUrl": "",
+    "CreateContainer.adminUsername?": "admin",
+    "CreateContainer.authenticationEmail": "",
+    "StartContainer.autostop?": "18:00"
+  }
 }
