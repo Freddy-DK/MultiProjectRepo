@@ -7,7 +7,7 @@
   "useCompilerFolder": true,
   "doNotPublishApps": true,
   "useProjectDependencies": true,
-  "generateDependencyArtifacts": true,
+  "generateDependencyArtifact": true,
   "artifact": "//28.0.46665.53102/w1/closest/",
   "templateSha": "a3877dcad8a18d304995e52367f0e0b54d35f534",
   "fkh": {
