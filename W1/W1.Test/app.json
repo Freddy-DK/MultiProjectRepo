@@ -2,7 +2,7 @@
   "id": "f8ce2e14-51dc-4696-bbf6-65a07b0eb576",
   "name": "MyApp-W1.Test",
   "publisher": "Freddy",
-  "version": "1.0.0.0",
+  "version": "2.0.0.0",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -27,7 +27,7 @@
       "id": "8f85d54c-ab9e-471e-bcb9-e666f1e48db5",
       "name": "Common.Test",
       "publisher": "Freddy",
-      "version": "1.0.0.0"
+      "version": "2.0.0.0"
     }
   ],
   "screenshots": [],
