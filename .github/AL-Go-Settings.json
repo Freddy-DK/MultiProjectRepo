@@ -23,6 +23,7 @@
     "CreateContainer.multitenant": false,
     "CreateContainer.licenseFileUrl": "",
     "CreateContainer.adminUsername?": "admin",
+    "CreateContainer.adminPassword?": "@adminPassword@",
     "CreateContainer.authenticationEmail": "",
     "StartContainer.autostop?": "18:00"
   }
