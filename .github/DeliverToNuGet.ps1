@@ -107,7 +107,7 @@ Param(
     $bcContainerHelperConfig.TrustedNuGetFeeds = @()
 
     foreach ($artifactType in @('apps', 'testApps')) {
-        $folder = $parameters."$($artifactType)Folder"
+        $folder = $parameters["$($artifactType)Folder"]
         if (-not $folder) {
             continue
         }
