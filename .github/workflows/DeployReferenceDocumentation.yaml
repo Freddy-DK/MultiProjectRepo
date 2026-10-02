@@ -26,28 +26,28 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Initialize the workflow
         id: init
-        uses: Freddy-DK/AL-Go/Actions/WorkflowInitialize@9e27a0a699982e360c6c07e1ce09ca92403d8060
+        uses: Freddy-DK/AL-Go/Actions/WorkflowInitialize@07a22c28bf4ef6863e617b2340163a1a612aa07e
         with:
           shell: pwsh
 
       - name: Read settings
-        uses: Freddy-DK/AL-Go/Actions/ReadSettings@9e27a0a699982e360c6c07e1ce09ca92403d8060
+        uses: Freddy-DK/AL-Go/Actions/ReadSettings@07a22c28bf4ef6863e617b2340163a1a612aa07e
         with:
           shell: pwsh
 
       - name: Determine ArtifactUrl
         id: determineArtifactUrl
-        uses: Freddy-DK/AL-Go/Actions/DetermineArtifactUrl@9e27a0a699982e360c6c07e1ce09ca92403d8060
+        uses: Freddy-DK/AL-Go/Actions/DetermineArtifactUrl@07a22c28bf4ef6863e617b2340163a1a612aa07e
         with:
           shell: pwsh
 
       - name: Determine Deployment Environments
         id: DetermineDeploymentEnvironments
-        uses: Freddy-DK/AL-Go/Actions/DetermineDeploymentEnvironments@9e27a0a699982e360c6c07e1ce09ca92403d8060
+        uses: Freddy-DK/AL-Go/Actions/DetermineDeploymentEnvironments@07a22c28bf4ef6863e617b2340163a1a612aa07e
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -60,7 +60,7 @@ jobs:
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
       - name: Build Reference Documentation
-        uses: Freddy-DK/AL-Go/Actions/BuildReferenceDocumentation@9e27a0a699982e360c6c07e1ce09ca92403d8060
+        uses: Freddy-DK/AL-Go/Actions/BuildReferenceDocumentation@07a22c28bf4ef6863e617b2340163a1a612aa07e
         with:
           shell: pwsh
           artifacts: 'latest'
@@ -74,11 +74,11 @@ jobs:
       - name: Deploy to GitHub Pages
         if: steps.DetermineDeploymentEnvironments.outputs.deployALDocArtifact == 1
         id: deployment
-        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
 
       - name: Finalize the workflow
         if: always()
-        uses: Freddy-DK/AL-Go/Actions/WorkflowPostProcess@9e27a0a699982e360c6c07e1ce09ca92403d8060
+        uses: Freddy-DK/AL-Go/Actions/WorkflowPostProcess@07a22c28bf4ef6863e617b2340163a1a612aa07e
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:

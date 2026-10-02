@@ -41,27 +41,27 @@ jobs:
     runs-on: [ ubuntu-latest ]
     steps:
       - name: Dump Workflow Information
-        uses: Freddy-DK/AL-Go/Actions/DumpWorkflowInfo@9e27a0a699982e360c6c07e1ce09ca92403d8060
+        uses: Freddy-DK/AL-Go/Actions/DumpWorkflowInfo@07a22c28bf4ef6863e617b2340163a1a612aa07e
         with:
           shell: pwsh
 
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Initialize the workflow
         id: init
-        uses: Freddy-DK/AL-Go/Actions/WorkflowInitialize@9e27a0a699982e360c6c07e1ce09ca92403d8060
+        uses: Freddy-DK/AL-Go/Actions/WorkflowInitialize@07a22c28bf4ef6863e617b2340163a1a612aa07e
         with:
           shell: pwsh
 
       - name: Read settings
-        uses: Freddy-DK/AL-Go/Actions/ReadSettings@9e27a0a699982e360c6c07e1ce09ca92403d8060
+        uses: Freddy-DK/AL-Go/Actions/ReadSettings@07a22c28bf4ef6863e617b2340163a1a612aa07e
         with:
           shell: pwsh
 
       - name: Read secrets
         id: ReadSecrets
-        uses: Freddy-DK/AL-Go/Actions/ReadSecrets@9e27a0a699982e360c6c07e1ce09ca92403d8060
+        uses: Freddy-DK/AL-Go/Actions/ReadSecrets@07a22c28bf4ef6863e617b2340163a1a612aa07e
         with:
           shell: pwsh
           gitHubSecrets: ${{ toJson(secrets) }}
@@ -69,7 +69,7 @@ jobs:
           useGhTokenWorkflowForPush: '${{ github.event.inputs.useGhTokenWorkflow }}'
 
       - name: Add existing app
-        uses: Freddy-DK/AL-Go/Actions/AddExistingApp@9e27a0a699982e360c6c07e1ce09ca92403d8060
+        uses: Freddy-DK/AL-Go/Actions/AddExistingApp@07a22c28bf4ef6863e617b2340163a1a612aa07e
         with:
           shell: pwsh
           token: ${{ steps.ReadSecrets.outputs.TokenForPush }}
@@ -79,7 +79,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: Freddy-DK/AL-Go/Actions/WorkflowPostProcess@9e27a0a699982e360c6c07e1ce09ca92403d8060
+        uses: Freddy-DK/AL-Go/Actions/WorkflowPostProcess@07a22c28bf4ef6863e617b2340163a1a612aa07e
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:

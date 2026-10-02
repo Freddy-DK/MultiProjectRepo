@@ -1,18 +1,73 @@
 ## main
 
-### GitHub Enterprise host compatibility fixes
+### Preview: Support for GitHub Enterprise Edition with data residency
 
-Several actions no longer assume the public `github.com`/`api.github.com` hosts, so they work on GitHub Enterprise (including `ghe.com`) organizations. REST calls now use `$ENV:GITHUB_API_URL` instead of a hardcoded `https://api.github.com` (Deploy, GetArtifactsForDeployment, VerifyPRChanges and app dependency probing), app dependency repositories default to `$ENV:GITHUB_SERVER_URL` instead of `https://github.com`, and the WorkflowPostProcess `gh api` call now sets `GH_HOST` so relative API calls target the correct host. When downloading app dependencies (artifacts and releases), the GitHub API URL is now derived from each dependency repository's host (`api.<host>`) instead of always using the current workflow's `$ENV:GITHUB_API_URL`, so dependencies hosted on a different GitHub host (e.g. `github.com` referenced from a `ghe.com` workflow, or vice versa) resolve correctly. Note that repositories using AL-Go for GitHub are supported on GHE, but the AL-Go for GitHub repository itself is not (it must run on github.com).
+AL-Go for GitHub is now supported on GitHub Enterprise Edition with data residency. When you create a GitHub Enterprise with data residency, you can create a number of organizations underneath this enterprise (much like we create organizations on github.com). In each of these organizations, you can create any number of internal or private repositories, you cannot create public repositories. The URL for your repository becomes https://enterprise.ghe.com/organization/repository instead of the normal https://github.com/organization/repository.
+
+> [!NOTE]
+> This feature is in preview
+
+### Include agentic workflows when updating system files from AL-Go or indirect templates
+
+Update AL-Go System Files will now also include .md files from .github/workflows. This is the recommended location for storing agentic workflows (.md files).
+### New `unpublishOldVersions` setting for deployment
+
+The `DeployTo<environment>` setting now supports an opt-in `unpublishOldVersions` boolean (default `false`). When enabled, AL-Go unpublishes old, uninstalled versions of the deployed apps from the environment after a successful deployment, keeping Extension Management clean. This only applies to PTE deployments (Scope PTE / automation API), uses the Automation API v2.0 `Microsoft.NAV.unpublish` action, and is non-fatal (failures are reported as warnings and never fail the deployment).
+
+### Expanded AL-Go telemetry dashboard
+
+The starter Azure Data Explorer dashboard now includes dedicated views for workflow reliability, run exploration, test quality, workflow duration, runner efficiency, and AL-Go maintenance. It also provides repository, workflow, branch, and repository-type filtering, clearer empty states, and repository-level runtime supportability information.
+
+### Create Release checks AL-Go system file updates separately
+
+The `Create Release` workflow now checks for available AL-Go system file updates in a separate job that runs in parallel with and independently of release creation. This allows the release to be created without waiting for the update check and can reduce the overall workflow duration.
+
+### Local development environments use cacheImageName
+
+localDevEnv now passes the configured cacheImageName to Run-AlPipeline, allowing BcContainerHelper to reuse artifact-specific images.
+To retain the previous behavior, set `cacheImageName` to an empty string in .AL-Go/localDevEnv.settings.json.
+
+### Issues
+
+- Issue 2375 - Project/App folder with umlaut breaks incremental build check
+
+## v9.2
+
+### New `doNotPerformUpgrade` setting
+
+AL-Go now supports a new `doNotPerformUpgrade` setting that is passed through to `Run-AlPipeline`. Use it to skip the upgrade phase while still running the rest of the pipeline.
 
 ### Workspace compilation supports framework-dependent AL Language extensions
 
 Workspace compilation now finds altool both in the platform-specific subfolder (`compiler/extension/bin/win32` or `.../linux`) and directly under `compiler/extension/bin`, so a `vsixFile` using the flat (framework-dependent / marketplace) layout no longer fails with "Could not find AL tool in the compiler folder". URL-based `customCodeCops` are likewise downloaded to the flat `bin` folder when no `Analyzers` subfolder is present. The aldoc tool used for reference documentation is resolved the same way, falling back to the flat `bin` folder when no platform subfolder is present.
 
+### `failOn: newWarning` now works with workspace compilation
+
+Previously, the `failOn: newWarning` setting (which fails a pull request when it introduces new AL compiler warnings) only took effect when compiling in a container or compiler folder. It had no effect when `workspaceCompilation` was enabled, because the new-warning comparison only ran in the `RunPipeline` action, whereas workspace compilation produces the compiler output in the `CompileApps` action. The check now also runs in `CompileApps`, so `failOn: newWarning` is honored with workspace compilation.
+
+As part of this, the warning comparison now also parses the raw AL compiler output format emitted by workspace compilation (in addition to the GitHub Actions annotation format), and it ignores embedded build version numbers in warning messages so that version differences between the baseline build and the pull request build no longer produce false "new warning" failures.
+
 ### Issues
 
 - Issue 2285 - CheckForUpdates now handles settings file `$schema` reordering in a PowerShell 5-safe way to avoid writing invalid entries like `"*": null` to settings JSON files.
 - Fix "filename or extension is too long" error when validating settings on PS5.1 with large settings JSON
+- Fix dependency apps not being resolved when the branch name contains a `]` character (the dependency folder was matched as a wildcard pattern instead of enumerated literally, resulting in 0 apps being published)
 - Retry downloading dependency artifacts from the current build up to 3 times (30 seconds between attempts) to tolerate transient network errors such as "Failed to GetSignedArtifactURL: Unable to make request: ETIMEDOUT"
+- Issue 2256 - Test Result Analyzer fails if no stack trace is available
+- Issue 2302 - AlDoc does not use --packagecache when building reference documentation
+- Reference documentation no longer fails with "InvalidTocInclude: Referenced TOC file ... does not exist" for apps whose name contains an underscore (e.g. `_Exclude_*` apps). The toc.yml folder names are now derived using the same rules as the aldoc tool, which keeps underscores instead of turning them into hyphens.
+- Issue 2319 - Under workspace compilation, `enableCodeAnalyzersOnTestApps: false` now also disables custom analyzers (`customCodeCops`) for test apps and BCPT test apps, not just the built-in code analyzers.
+- Issue 2267 - `AppSourceCop.json` is now created for test apps when `enableCodeAnalyzersOnTestApps` is true.
+- Issue 2320 - Deliver to NuGet of release workflow failing with app and test app
+- Issue 2337 - Incremental builds: skipped projects re-publish Default-mode apps into ALL buildMode-specific artifacts
+
+### Valid SARIF URIs for file paths containing spaces
+
+`ProcessALCodeAnalysisLogs` now URI-encodes each segment of the artifact location path when writing SARIF (for example `1.Setup Data/Foo.al` becomes `1.Setup%20Data/Foo.al`). Paths that contain spaces or other characters that are not valid in a URI previously caused `github/codeql-action/upload-sarif` to log "is not a valid URI" warnings and could prevent AL code scanning alerts from mapping to the correct files. The `/` path separators are preserved so the path structure is unchanged.
+
+### AL alerts for the workspace compilation build
+
+The `trackALAlertsInGitHub` setting now also works when `workspaceCompilation` (preview) is enabled. When both are turned on, AL-Go passes `--errorlogdirectory` to `altool workspace compile` so each project emits an `*.errorLog.json` diagnostics file into `.buildartifacts/ErrorLogs/`, which is processed into SARIF and surfaced as code scanning alerts — matching the classic Run-AlPipeline behavior. If the consumed compiler version does not yet support `--errorlogdirectory`, the option is skipped and a warning is logged (the rest of the build is unaffected).
 
 ## v9.1
 

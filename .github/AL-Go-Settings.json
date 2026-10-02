@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/Freddy-DK/AL-Go/Actions/9e27a0a699982e360c6c07e1ce09ca92403d8060/.Modules/settings.schema.json",
+  "$schema": "https://raw.githubusercontent.com/Freddy-DK/AL-Go/07a22c28bf4ef6863e617b2340163a1a612aa07e/Actions/.Modules/settings.schema.json",
   "type": "PTE",
   "templateUrl": "https://github.com/Freddy-DK/AL-Go-PTE@main",
   "runs-on": "ubuntu-latest",
@@ -9,7 +9,7 @@
   "useProjectDependencies": true,
   "generateDependencyArtifact": true,
   "artifact": "//28.0.46665.53102/w1/closest/",
-  "templateSha": "8d9e42cfc13aa9f695fb9d22567a973c2457f8c9",
+  "templateSha": "31343cc4a85ff715f8e3e59679ed6f8e7046f2a7",
   "fkh": {
     "CreateContainer.cpu": "250m",
     "CreateContainer.memory": "3Gi",
