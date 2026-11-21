@@ -76,6 +76,7 @@ Param(
         $script:deliverToNuGetState = @{
             "processedPackages" = @()
             "manifestEntries"   = @()
+            "summaryHeaderWritten" = $false
         }
     }
     $state = $script:deliverToNuGetState
@@ -205,19 +206,19 @@ Param(
     if ($ignored.Count -eq 0) { Write-Host "  (none)" }
     $ignored | ForEach-Object { Write-Host "  $($_.App) $($_.Version) ($($_.Package)) - $($_.Reason)" }
 
-    if ($ENV:GITHUB_STEP_SUMMARY) {
-        $summary = @("### Delivery to $deliveryTarget - project $($parameters.Project)", "")
-        if ($deliveryResults.Count -eq 0) {
-            $summary += "No apps found to deliver."
+    # Rows are appended per project without blank lines, so all projects render as one table
+    if ($ENV:GITHUB_STEP_SUMMARY -and $deliveryResults.Count -gt 0) {
+        $summary = @()
+        if (-not $state.summaryHeaderWritten) {
+            $summary += "### Delivery to $deliveryTarget"
+            $summary += ""
+            $summary += "| Project | App | Version | Package | Status | Reason |"
+            $summary += "|---------|-----|---------|---------|--------|--------|"
+            $state.summaryHeaderWritten = $true
         }
-        else {
-            $summary += "| App | Version | Package | Status | Reason |"
-            $summary += "|-----|---------|---------|--------|--------|"
-            foreach ($r in @($uploaded + $ignored)) {
-                $summary += "| $($r.App) | $($r.Version) | $($r.Package) | $($r.Status) | $($r.Reason) |"
-            }
+        foreach ($r in @($uploaded + $ignored)) {
+            $summary += "| $($parameters.Project) | $($r.App) | $($r.Version) | $($r.Package) | $($r.Status) | $($r.Reason) |"
         }
-        $summary += ""
         Add-Content -Path $ENV:GITHUB_STEP_SUMMARY -Value $summary -Encoding UTF8
     }
 }
