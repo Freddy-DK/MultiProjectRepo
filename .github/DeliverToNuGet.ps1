@@ -7,6 +7,10 @@ Param(
 & {
     $errorActionPreference = "Stop"; $ProgressPreference = "SilentlyContinue"; Set-StrictMode -Version 2.0
 
+    # When true, releases are always delivered without comparing to the latest published package
+    $alwaysDeliverReleasedApps = $true
+    $compareWithLatest = -not ($alwaysDeliverReleasedApps -and $parameters.type -eq 'Release')
+
     function Compare-AppFiles {
         Param(
             [Parameter(Mandatory = $true)]
@@ -143,7 +147,10 @@ Param(
             }
 
             $pushNewPackage = $true
-            $packageFolder = Get-BcNuGetPackage -nuGetServerUrl $nuGetServerUrl -nuGetToken $nuGetToken -packageName $packageName -select Latest -allowPrerelease:($preReleaseTag -ne '')
+            $packageFolder = $null
+            if ($compareWithLatest) {
+                $packageFolder = Get-BcNuGetPackage -nuGetServerUrl $nuGetServerUrl -nuGetToken $nuGetToken -packageName $packageName -select Latest -allowPrerelease:($preReleaseTag -ne '')
+            }
             if ($packageFolder) {
                 $oldAppFile = Get-ChildItem -Path (Join-Path $packageFolder '*.app') | Select-Object -First 1
                 if ($oldAppFile) {
