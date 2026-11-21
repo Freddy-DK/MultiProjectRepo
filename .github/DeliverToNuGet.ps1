@@ -106,6 +106,7 @@ Param(
     # Do not search trusted NuGet feeds for packages when looking for whether packages have been delivered
     $bcContainerHelperConfig.TrustedNuGetFeeds = @()
 
+    $deliveryResults = @()
     foreach ($artifactType in @('apps', 'testApps')) {
         $folder = $parameters["$($artifactType)Folder"]
         if (-not $folder) {
@@ -115,8 +116,17 @@ Param(
             $newAppFile = $appFile.FullName
             $appJson = Get-AppJsonFromAppFile -appFile $newAppFile
             $packageName = Get-BcNuGetPackageId -publisher $appJson.publisher -name $appJson.name -id $appJson.id -version $appJson.version
+            $result = [PSCustomObject]@{
+                "App"     = "$($appJson.name)"
+                "Version" = "$($appJson.version)"
+                "Package" = "$packageName"
+                "Status"  = "Ignored"
+                "Reason"  = ""
+            }
+            $deliveryResults += $result
             if ($state.processedPackages -contains $packageName) {
                 Write-Host "Package $packageName has already been delivered in this run, skipping"
+                $result.Reason = "Already processed by an earlier project in this run"
                 continue
             }
 
@@ -127,6 +137,7 @@ Param(
             $feed, $packageId, $packageVersion = Find-BcNugetPackage -nuGetServerUrl $nuGetServerUrl -nuGetToken $nuGetToken -packageName $packageName -version $searchVersion -select Exact -allowPrerelease
             if ($feed) {
                 Write-Host "Package $packageName version $searchVersion already exists on the feed"
+                $result.Reason = "Version $searchVersion already exists on the feed"
                 continue
             }
 
@@ -138,6 +149,7 @@ Param(
                     $pushNewPackage = -not (Compare-AppFiles -AppFile1 $newAppFile -AppFile2 $oldAppFile.FullName)
                     if (-not $pushNewPackage) {
                         Write-Host "The last published package $packageName is identical to the one being delivered, skipping"
+                        $result.Reason = "Identical to the latest published package"
                     }
                 }
             }
@@ -146,6 +158,10 @@ Param(
                 Write-Host "Pushing new package $packageName to $nuGetServerUrl"
                 $package = New-BcNuGetPackage -gitHubRepository "$ENV:GITHUB_SERVER_URL/$ENV:GITHUB_REPOSITORY" -preReleaseTag $preReleaseTag -appFile $newAppFile
                 Push-BcNuGetPackage -nuGetServerUrl $nuGetServerUrl -nuGetToken $nuGetToken -bcNuGetPackage $package
+                $result.Status = "Uploaded"
+                if ($preReleaseTag) {
+                    $result.Version += "-$preReleaseTag"
+                }
                 if ($artifactType -eq 'Apps') {
                     $state.manifestEntries += [PSCustomObject]@{
                         "id"             = "$($appJson.id)"
@@ -178,4 +194,30 @@ Param(
     Write-Host "Delivery manifest with $($state.manifestEntries.Count) package(s) written to $manifestPath"
 
     # TODO: need to upload file: $manifestPath (DeliveryManifest-<deliveryTarget>.json) somewhere
+
+    Write-Host "Delivery summary for project $($parameters.Project) to $($deliveryTarget):"
+    $uploaded = @($deliveryResults | Where-Object { $_.Status -eq 'Uploaded' })
+    $ignored = @($deliveryResults | Where-Object { $_.Status -eq 'Ignored' })
+    Write-Host "Uploaded ($($uploaded.Count)):"
+    if ($uploaded.Count -eq 0) { Write-Host "  (none)" }
+    $uploaded | ForEach-Object { Write-Host "  $($_.App) $($_.Version) ($($_.Package))" }
+    Write-Host "Ignored ($($ignored.Count)):"
+    if ($ignored.Count -eq 0) { Write-Host "  (none)" }
+    $ignored | ForEach-Object { Write-Host "  $($_.App) $($_.Version) ($($_.Package)) - $($_.Reason)" }
+
+    if ($ENV:GITHUB_STEP_SUMMARY) {
+        $summary = @("### Delivery to $deliveryTarget - project $($parameters.Project)", "")
+        if ($deliveryResults.Count -eq 0) {
+            $summary += "No apps found to deliver."
+        }
+        else {
+            $summary += "| App | Version | Package | Status | Reason |"
+            $summary += "|-----|---------|---------|--------|--------|"
+            foreach ($r in @($uploaded + $ignored)) {
+                $summary += "| $($r.App) | $($r.Version) | $($r.Package) | $($r.Status) | $($r.Reason) |"
+            }
+        }
+        $summary += ""
+        Add-Content -Path $ENV:GITHUB_STEP_SUMMARY -Value $summary -Encoding UTF8
+    }
 }
