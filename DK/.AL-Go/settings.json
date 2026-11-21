@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/Freddy-DK/AL-Go/07a22c28bf4ef6863e617b2340163a1a612aa07e/Actions/.Modules/settings.schema.json",
+  "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go/957ea1ea2e286bc966ac24c9f24035dbd30d72ed/Actions/.Modules/settings.schema.json",
   "country": "dk",
   "appFolders": [],
   "testFolders": [],

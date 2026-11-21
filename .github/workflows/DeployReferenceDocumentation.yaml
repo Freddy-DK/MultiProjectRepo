@@ -30,24 +30,24 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: Freddy-DK/AL-Go/Actions/WorkflowInitialize@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/WorkflowInitialize@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
 
       - name: Read settings
-        uses: Freddy-DK/AL-Go/Actions/ReadSettings@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSettings@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
 
       - name: Determine ArtifactUrl
         id: determineArtifactUrl
-        uses: Freddy-DK/AL-Go/Actions/DetermineArtifactUrl@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/DetermineArtifactUrl@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
 
       - name: Determine Deployment Environments
         id: DetermineDeploymentEnvironments
-        uses: Freddy-DK/AL-Go/Actions/DetermineDeploymentEnvironments@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/DetermineDeploymentEnvironments@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -60,7 +60,7 @@ jobs:
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
       - name: Build Reference Documentation
-        uses: Freddy-DK/AL-Go/Actions/BuildReferenceDocumentation@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/BuildReferenceDocumentation@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           artifacts: 'latest'
@@ -78,7 +78,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: Freddy-DK/AL-Go/Actions/WorkflowPostProcess@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/WorkflowPostProcess@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:

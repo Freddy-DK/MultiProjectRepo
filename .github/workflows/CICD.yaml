@@ -51,7 +51,7 @@ jobs:
       trackALAlertsInGitHub: ${{ steps.SetALCodeAnalysisVar.outputs.trackALAlertsInGitHub }}
     steps:
       - name: Dump Workflow Information
-        uses: Freddy-DK/AL-Go/Actions/DumpWorkflowInfo@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/DumpWorkflowInfo@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
 
@@ -62,13 +62,13 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: Freddy-DK/AL-Go/Actions/WorkflowInitialize@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/WorkflowInitialize@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
 
       - name: Read settings
         id: ReadSettings
-        uses: Freddy-DK/AL-Go/Actions/ReadSettings@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSettings@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           get: type,powerPlatformSolutionFolder,useGitSubmodules,trackALAlertsInGitHub
@@ -82,7 +82,7 @@ jobs:
       - name: Read submodules token
         id: ReadSubmodulesToken
         if: env.useGitSubmodules != 'false' && env.useGitSubmodules != ''
-        uses: Freddy-DK/AL-Go/Actions/ReadSecrets@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSecrets@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           gitHubSecrets: ${{ toJson(secrets) }}
@@ -103,7 +103,7 @@ jobs:
 
       - name: Determine Projects To Build
         id: determineProjectsToBuild
-        uses: Freddy-DK/AL-Go/Actions/DetermineProjectsToBuild@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/DetermineProjectsToBuild@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           maxBuildDepth: ${{ env.workflowDepth }}
@@ -116,7 +116,7 @@ jobs:
 
       - name: Determine Delivery Target Secrets
         id: DetermineDeliveryTargetSecrets
-        uses: Freddy-DK/AL-Go/Actions/DetermineDeliveryTargets@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/DetermineDeliveryTargets@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           projectsJson: '${{ steps.determineProjectsToBuild.outputs.ProjectsJson }}'
@@ -124,7 +124,7 @@ jobs:
 
       - name: Read secrets
         id: ReadSecrets
-        uses: Freddy-DK/AL-Go/Actions/ReadSecrets@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSecrets@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           gitHubSecrets: ${{ toJson(secrets) }}
@@ -132,7 +132,7 @@ jobs:
 
       - name: Determine Delivery Targets
         id: DetermineDeliveryTargets
-        uses: Freddy-DK/AL-Go/Actions/DetermineDeliveryTargets@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/DetermineDeliveryTargets@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         env:
           Secrets: '${{ steps.ReadSecrets.outputs.Secrets }}'
         with:
@@ -142,7 +142,7 @@ jobs:
 
       - name: Determine Deployment Environments
         id: DetermineDeploymentEnvironments
-        uses: Freddy-DK/AL-Go/Actions/DetermineDeploymentEnvironments@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/DetermineDeploymentEnvironments@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -158,21 +158,21 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Read settings
-        uses: Freddy-DK/AL-Go/Actions/ReadSettings@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSettings@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           get: templateUrl
 
       - name: Read secrets
         id: ReadSecrets
-        uses: Freddy-DK/AL-Go/Actions/ReadSecrets@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSecrets@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           gitHubSecrets: ${{ toJson(secrets) }}
           getSecrets: 'ghTokenWorkflow'
 
       - name: Check for updates to AL-Go system files
-        uses: Freddy-DK/AL-Go/Actions/CheckForUpdates@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/CheckForUpdates@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -266,7 +266,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Download artifacts - ErrorLogs
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         env:
           ACTIONS_RUNNER_DISABLE_NODE_MAGLEV: 1
         if: (success() || failure())
@@ -278,12 +278,12 @@ jobs:
       - name: Process AL Code Analysis Logs
         id: ProcessALCodeAnalysisLogs
         if: (success() || failure())
-        uses: Freddy-DK/AL-Go/Actions/ProcessALCodeAnalysisLogs@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ProcessALCodeAnalysisLogs@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
 
       - name: Upload SARIF file to GitHub
-        uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4.38.0
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
         if: (success() || failure()) && (hashFiles(format('{0}/ErrorLogs/output.sarif.json',github.workspace)) != '')
         with:
           sarif_file: '${{ github.workspace }}/ErrorLogs/output.sarif.json'
@@ -307,20 +307,20 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Download artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         env:
           ACTIONS_RUNNER_DISABLE_NODE_MAGLEV: 1
         with:
           path: '.artifacts'
 
       - name: Read settings
-        uses: Freddy-DK/AL-Go/Actions/ReadSettings@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSettings@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
 
       - name: Determine ArtifactUrl
         id: determineArtifactUrl
-        uses: Freddy-DK/AL-Go/Actions/DetermineArtifactUrl@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/DetermineArtifactUrl@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
 
@@ -329,7 +329,7 @@ jobs:
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
       - name: Build Reference Documentation
-        uses: Freddy-DK/AL-Go/Actions/BuildReferenceDocumentation@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/BuildReferenceDocumentation@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           artifacts: '.artifacts'
@@ -365,14 +365,14 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Download artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         env:
           ACTIONS_RUNNER_DISABLE_NODE_MAGLEV: 1
         with:
           path: '.artifacts'
 
       - name: Read settings
-        uses: Freddy-DK/AL-Go/Actions/ReadSettings@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSettings@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: ${{ matrix.shell }}
           get: type,powerPlatformSolutionFolder
@@ -386,7 +386,7 @@ jobs:
 
       - name: Read secrets
         id: ReadSecrets
-        uses: Freddy-DK/AL-Go/Actions/ReadSecrets@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSecrets@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: ${{ matrix.shell }}
           gitHubSecrets: ${{ toJson(secrets) }}
@@ -394,7 +394,7 @@ jobs:
 
       - name: Deploy to Business Central
         id: Deploy
-        uses: Freddy-DK/AL-Go/Actions/Deploy@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/Deploy@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         env:
           Secrets: '${{ steps.ReadSecrets.outputs.Secrets }}'
         with:
@@ -406,7 +406,7 @@ jobs:
 
       - name: Deploy to Power Platform
         if: env.type == 'PTE' && env.powerPlatformSolutionFolder != ''
-        uses: Freddy-DK/AL-Go/Actions/DeployPowerPlatform@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/DeployPowerPlatform@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         env:
           Secrets: '${{ steps.ReadSecrets.outputs.Secrets }}'
         with:
@@ -429,27 +429,27 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Download artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         env:
           ACTIONS_RUNNER_DISABLE_NODE_MAGLEV: 1
         with:
           path: '.artifacts'
 
       - name: Read settings
-        uses: Freddy-DK/AL-Go/Actions/ReadSettings@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSettings@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
 
       - name: Read secrets
         id: ReadSecrets
-        uses: Freddy-DK/AL-Go/Actions/ReadSecrets@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSecrets@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           gitHubSecrets: ${{ toJson(secrets) }}
           getSecrets: '${{ matrix.deliveryTarget }}Context'
 
       - name: Deliver
-        uses: Freddy-DK/AL-Go/Actions/Deliver@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/Deliver@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         env:
           Secrets: '${{ steps.ReadSecrets.outputs.Secrets }}'
         with:
@@ -469,7 +469,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: Freddy-DK/AL-Go/Actions/WorkflowPostProcess@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/WorkflowPostProcess@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:

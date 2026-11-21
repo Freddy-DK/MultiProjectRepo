@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       templateUrl:
-        description: Template Repository URL (current is https://github.com/Freddy-DK/AL-Go-PTE@main)
+        description: Template Repository URL (current is https://github.com/microsoft/AL-Go-PTE@preview)
         required: false
         default: ''
       downloadLatest:
@@ -26,7 +26,7 @@ on:
         type: string
         required: true
       templateUrl:
-        description: Template Repository URL (current is https://github.com/Freddy-DK/AL-Go-PTE@main)
+        description: Template Repository URL (current is https://github.com/microsoft/AL-Go-PTE@preview)
         type: string
         required: false
         default: ''
@@ -71,14 +71,14 @@ jobs:
 
       - name: Read settings
         id: ReadSettings
-        uses: Freddy-DK/AL-Go/Actions/ReadSettings@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSettings@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           get: templateUrl
 
       - name: Get Workflow Multi-Run Branches
         id: GetBranches
-        uses: Freddy-DK/AL-Go/Actions/GetWorkflowMultiRunBranches@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/GetWorkflowMultiRunBranches@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           workflowEventName: ${{ env.WorkflowEventName }}
@@ -108,7 +108,7 @@ jobs:
 
     steps:
       - name: Dump Workflow Information
-        uses: Freddy-DK/AL-Go/Actions/DumpWorkflowInfo@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/DumpWorkflowInfo@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
 
@@ -119,19 +119,19 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: Freddy-DK/AL-Go/Actions/WorkflowInitialize@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/WorkflowInitialize@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
 
       - name: Read settings
-        uses: Freddy-DK/AL-Go/Actions/ReadSettings@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSettings@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           get: commitOptions
 
       - name: Read secrets
         id: ReadSecrets
-        uses: Freddy-DK/AL-Go/Actions/ReadSecrets@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/ReadSecrets@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         with:
           shell: pwsh
           gitHubSecrets: ${{ toJson(secrets) }}
@@ -158,7 +158,7 @@ jobs:
           Add-Content -Encoding UTF8 -Path $env:GITHUB_ENV -Value "downloadLatest=$downloadLatest"
 
       - name: Update AL-Go system files
-        uses: Freddy-DK/AL-Go/Actions/CheckForUpdates@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/CheckForUpdates@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -172,7 +172,7 @@ jobs:
 
       - name: Finalize the workflow
         if: always()
-        uses: Freddy-DK/AL-Go/Actions/WorkflowPostProcess@07a22c28bf4ef6863e617b2340163a1a612aa07e
+        uses: microsoft/AL-Go/Actions/WorkflowPostProcess@957ea1ea2e286bc966ac24c9f24035dbd30d72ed
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:

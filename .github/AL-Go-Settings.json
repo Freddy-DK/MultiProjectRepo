@@ -1,7 +1,7 @@
 {
-  "$schema": "https://raw.githubusercontent.com/Freddy-DK/AL-Go/07a22c28bf4ef6863e617b2340163a1a612aa07e/Actions/.Modules/settings.schema.json",
+  "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go/957ea1ea2e286bc966ac24c9f24035dbd30d72ed/Actions/.Modules/settings.schema.json",
   "type": "PTE",
-  "templateUrl": "https://github.com/Freddy-DK/AL-Go-PTE@main",
+  "templateUrl": "https://github.com/microsoft/AL-Go-PTE@preview",
   "runs-on": "ubuntu-latest",
   "githubRunner": "ubuntu-latest",
   "useCompilerFolder": true,
@@ -9,7 +9,7 @@
   "useProjectDependencies": true,
   "generateDependencyArtifact": true,
   "artifact": "//28.0.46665.53102/w1/closest/",
-  "templateSha": "31343cc4a85ff715f8e3e59679ed6f8e7046f2a7",
+  "templateSha": "c467e0645383cf215f5d51b8f71d09cb78e52291",
   "fkh": {
     "CreateContainer.cpu": "250m",
     "CreateContainer.memory": "3Gi",
