@@ -117,9 +117,13 @@ Param(
             $newAppFile = $appFile.FullName
             $appJson = Get-AppJsonFromAppFile -appFile $newAppFile
             $packageName = Get-BcNuGetPackageId -publisher $appJson.publisher -name $appJson.name -id $appJson.id -version $appJson.version
+            $searchVersion = $appJson.version
+            if ($preReleaseTag) {
+                $searchVersion += "-$preReleaseTag"
+            }
             $result = [PSCustomObject]@{
                 "App"     = "$($appJson.name)"
-                "Version" = "$($appJson.version)"
+                "Version" = "$searchVersion"
                 "Package" = "$packageName"
                 "Status"  = "Ignored"
                 "Reason"  = ""
@@ -131,10 +135,6 @@ Param(
                 continue
             }
 
-            $searchVersion = $appJson.version
-            if ($preReleaseTag) {
-                $searchVersion += "-$preReleaseTag"
-            }
             $feed, $packageId, $packageVersion = Find-BcNugetPackage -nuGetServerUrl $nuGetServerUrl -nuGetToken $nuGetToken -packageName $packageName -version $searchVersion -select Exact -allowPrerelease
             if ($feed) {
                 Write-Host "Package $packageName version $searchVersion already exists on the feed"
@@ -160,9 +160,6 @@ Param(
                 $package = New-BcNuGetPackage -gitHubRepository "$ENV:GITHUB_SERVER_URL/$ENV:GITHUB_REPOSITORY" -preReleaseTag $preReleaseTag -appFile $newAppFile
                 Push-BcNuGetPackage -nuGetServerUrl $nuGetServerUrl -nuGetToken $nuGetToken -bcNuGetPackage $package
                 $result.Status = "Uploaded"
-                if ($preReleaseTag) {
-                    $result.Version += "-$preReleaseTag"
-                }
                 if ($artifactType -eq 'Apps') {
                     $state.manifestEntries += [PSCustomObject]@{
                         "id"             = "$($appJson.id)"
