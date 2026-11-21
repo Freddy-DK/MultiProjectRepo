@@ -8,6 +8,15 @@
   "doNotPublishApps": true,
   "useProjectDependencies": true,
   "generateDependencyArtifact": true,
+  "CodeReviewAgent": {
+    "enabled": true,
+    "branches": [
+      "main"
+    ],
+    "excludedAuthors": [
+      "dependabot[bot]"
+    ]
+  },
   "artifact": "//28.0.46665.53102/w1/closest/",
   "templateSha": "c467e0645383cf215f5d51b8f71d09cb78e52291",
   "fkh": {
