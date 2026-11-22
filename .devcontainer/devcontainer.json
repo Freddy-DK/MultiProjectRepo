@@ -1,0 +1,15 @@
+{
+  "name": "MultiProjectRepo",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/powershell:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dynamics-smb.al",
+        "freddy-dk.fkh"
+      ]
+    }
+  }
+}
