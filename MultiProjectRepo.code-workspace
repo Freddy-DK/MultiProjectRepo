@@ -22,5 +22,11 @@
             "path": "DE"
         }
     ],
-    "settings": {}
+    "settings": {},
+    "extensions": {
+        "recommendations": [
+            "ms-dynamics-smb.al",
+            "freddy-dk.fkh"
+        ]
+    }
 }
